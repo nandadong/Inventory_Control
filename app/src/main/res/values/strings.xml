@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Inventory Control</string>
+    <string name="scan">Scan</string>
+</resources>
