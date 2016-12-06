@@ -35,6 +35,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.nandong.inventorycontrol.ScanBarcodeFragment;
+
 /**
  * <p>A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple
  * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the

@@ -1,55 +1,105 @@
 package com.example.nandong.inventorycontrol;
 
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-import android.app.Activity;
-import android.content.Intent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
+import android.support.design.widget.NavigationView;
+import android.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener {
-    private Button scanBtn;
-    private TextView formatTxt, contentTxt;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+@SuppressWarnings("ConstantConditions")
+public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.drawer) NavigationView navigationView;
+    @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        scanBtn = (Button)findViewById(R.id.scan_button);
-        formatTxt = (TextView)findViewById(R.id.scan_format);
-        contentTxt = (TextView)findViewById(R.id.scan_content);
+        ButterKnife.bind(this);
 
-        scanBtn.setOnClickListener(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        setupDrawer();
 
     }
-    public void onClick(View v){
-        //respond to clicks
-        if(v.getId()==R.id.scan_button){
-            //scan
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        //retrieve scan result
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
-            //we have a result
-            String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            formatTxt.setText("FORMAT: " + scanFormat);
-            contentTxt.setText("CONTENT: " + scanContent);
-        } else {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
+    private void setupDrawer() {
+        drawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                R.string.open_drawer,
+                R.string.close_drawer
+        );
 
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                if (item.isChecked()) {
+                    drawerLayout.closeDrawers();
+                    return true;
+                }
+                Fragment fragment = null;
+                switch (item.getItemId()) {
+                    case R.id.drawer_item_home:
+                        Toast.makeText(MainActivity.this, "home clicked", Toast.LENGTH_SHORT).show();
+                        setTitle(R.string.title_home);
+                        break;
+                    case R.id.drawer_item_user:
+                        Toast.makeText(MainActivity.this, "user clicked", Toast.LENGTH_SHORT).show();
+                        setTitle(R.string.title_user);
+                        break;
+                    case R.id.drawer_item_scan:
+                        fragment = ScanBarcodeFragment.newInstance();
+                        Toast.makeText(MainActivity.this, "scan clicked", Toast.LENGTH_SHORT).show();
+                        setTitle(R.string.title_scan);
+                        break;
+                }
+                drawerLayout.closeDrawers();
+
+                if (fragment != null) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .commit();
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
 
 }
