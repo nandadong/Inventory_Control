@@ -58,6 +58,9 @@ public class ScanBarcodeFragment extends Fragment implements View.OnClickListene
             String scanFormat = scanningResult.getFormatName();
             formatTxt.setText("FORMAT: " + scanFormat);
             contentTxt.setText("CONTENT: " + scanContent);
+
+            intent = new Intent(getActivity(), DisplayItemActivity.class);
+            startActivity(intent);
         } else {
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),
                     "No scan data received!", Toast.LENGTH_SHORT);
