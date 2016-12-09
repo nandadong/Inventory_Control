@@ -74,16 +74,16 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 switch (item.getItemId()) {
                     case R.id.drawer_item_home:
-                        Toast.makeText(MainActivity.this, "home clicked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "back to homepage", Toast.LENGTH_SHORT).show();
                         setTitle(R.string.title_home);
                         break;
                     case R.id.drawer_item_user:
-                        Toast.makeText(MainActivity.this, "user clicked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "please type username", Toast.LENGTH_SHORT).show();
                         setTitle(R.string.title_user);
                         break;
                     case R.id.drawer_item_scan:
                         fragment = ScanBarcodeFragment.newInstance();
-                        Toast.makeText(MainActivity.this, "scan clicked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "please scan barcode", Toast.LENGTH_SHORT).show();
                         setTitle(R.string.title_scan);
                         break;
                 }

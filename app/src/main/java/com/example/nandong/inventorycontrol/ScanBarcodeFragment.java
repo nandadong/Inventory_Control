@@ -1,5 +1,6 @@
 package com.example.nandong.inventorycontrol;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,8 +12,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonSyntaxException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by nandong on 12/5/16.
@@ -22,6 +33,7 @@ import com.google.zxing.integration.android.IntentResult;
 public class ScanBarcodeFragment extends Fragment implements View.OnClickListener {
     private Button scanBtn;
     private TextView formatTxt, contentTxt;
+    private static final String ITEM_INFO_URL = "http://ec2-35-162-62-161.us-west-2.compute.amazonaws.com:8000/item_info?barcode=";
 
     public static ScanBarcodeFragment newInstance() {
         return new ScanBarcodeFragment();
@@ -54,17 +66,65 @@ public class ScanBarcodeFragment extends Fragment implements View.OnClickListene
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             //we have a result
-            String scanContent = scanningResult.getContents();
+            final String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
             formatTxt.setText("FORMAT: " + scanFormat);
             contentTxt.setText("CONTENT: " + scanContent);
 
-            intent = new Intent(getActivity(), DisplayItemActivity.class);
-            startActivity(intent);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String itemInfo = fetchScannedItemInfo(scanContent);
+
+                        if (!itemInfo.isEmpty()) {
+                            //System.out.println("Item Scanned: " + itemInfo);
+                            Intent intent = new Intent(getActivity(), DisplayItemActivity.class);
+                            intent.putExtra("itemInfo", itemInfo);
+                            startActivity(intent);
+                        } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity().getApplicationContext(),
+                                            "Scanned item not found in database!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    } catch (IOException | JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+
         } else {
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
+        }
+    }
+
+    private String fetchScannedItemInfo(String scanContent) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        String url = ITEM_INFO_URL + scanContent;
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        String responseString = response.body().string();
+
+        try {
+            JSONObject obj = new JSONObject(responseString);
+            if (obj.length() == 0) {
+                return "";
+            }
+            return obj.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 }
