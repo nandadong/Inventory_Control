@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Inventory Control</string>
     <string name="scan">Scan</string>
+    <string name="search">Search</string>
 
     <string name="drawer_menu_home">Home</string>
     <string name="drawer_menu_user">User</string>
@@ -9,6 +10,8 @@
     <string name="title_home">Inventory Control</string>
     <string name="title_user">User</string>
     <string name="title_scan">Scan</string>
+
+    <string name="hint_username">Last Name, First Name</string>
 
     <string name="open_drawer">open drawer</string>
     <string name="close_drawer">close drawer</string>

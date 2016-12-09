@@ -52,9 +52,9 @@ public class ScanBarcodeFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    public void onClick(View v){
+    public void onClick(View view){
         //respond to clicks
-        if(v.getId() == R.id.scan_button){
+        if(view.getId() == R.id.scan_button){
             //scan
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();

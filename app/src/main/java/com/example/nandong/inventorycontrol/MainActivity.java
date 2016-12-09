@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                         setTitle(R.string.title_home);
                         break;
                     case R.id.drawer_item_user:
-                        Toast.makeText(MainActivity.this, "please type username", Toast.LENGTH_SHORT).show();
+                        fragment = SearchUsernameFragment.newInstance();
+                        Toast.makeText(MainActivity.this, "please type in username", Toast.LENGTH_SHORT).show();
                         setTitle(R.string.title_user);
                         break;
                     case R.id.drawer_item_scan:
