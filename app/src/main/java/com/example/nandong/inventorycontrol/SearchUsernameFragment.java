@@ -12,6 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonSyntaxException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
  * Created by nandong on 12/9/16.
  */
@@ -21,6 +33,7 @@ public class SearchUsernameFragment extends Fragment implements View.OnClickList
     private Button searchBtn;
     private EditText usernameTxt;
     private String username;
+    private static final String USER_INVENTORY_URL = "http://ec2-35-162-62-161.us-west-2.compute.amazonaws.com:8000/item_info?username=";
 
     public static SearchUsernameFragment newInstance() {
         return new SearchUsernameFragment();
@@ -44,14 +57,49 @@ public class SearchUsernameFragment extends Fragment implements View.OnClickList
             // search
             username = usernameTxt.getText().toString();
             if (!username.isEmpty()) {
-                Intent intent = new Intent(getActivity(), DisplayInventoryListActivity.class);
-                startActivity(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String rawInventoryList = fetchUserInventoryList(username);
+                            if (!rawInventoryList.isEmpty()) {
+                                Intent intent = new Intent(getActivity(), DisplayInventoryListActivity.class);
+                                intent.putExtra("rawInventoryList", rawInventoryList);
+                                startActivity(intent);
+                            }
+                        } catch (IOException | JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
             } else {
                 Toast.makeText(getActivity().getApplicationContext(), "please type in username", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    private String fetchUserInventoryList(String userName) throws IOException {
+        OkHttpClient client = new OkHttpClient();
 
+        String url = USER_INVENTORY_URL + userName;
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        String responseString = response.body().string();
+
+        try {
+            JSONArray arr = new JSONArray(responseString);
+            if (arr.length() == 0) {
+                return "";
+            }
+            return arr.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 }
 

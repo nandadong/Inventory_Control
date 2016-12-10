@@ -87,7 +87,7 @@ public class ScanBarcodeFragment extends Fragment implements View.OnClickListene
                                 @Override
                                 public void run() {
                                     Toast.makeText(getActivity().getApplicationContext(),
-                                            "Scanned item not found in database!", Toast.LENGTH_SHORT).show();
+                                            "scanned item not found in database!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
