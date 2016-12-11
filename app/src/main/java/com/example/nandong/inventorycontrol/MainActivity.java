@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 @SuppressWarnings("ConstantConditions")
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
 
@@ -27,11 +29,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         setupDrawer();
 
+        if (savedInstanceState == null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_container, HomePageFragment.newInstance())
+                    .commit();
+        }
     }
 
     @Override
@@ -74,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 switch (item.getItemId()) {
                     case R.id.drawer_item_home:
+                        fragment = HomePageFragment.newInstance();
                         Toast.makeText(MainActivity.this, "back to homepage", Toast.LENGTH_SHORT).show();
                         setTitle(R.string.title_home);
                         break;

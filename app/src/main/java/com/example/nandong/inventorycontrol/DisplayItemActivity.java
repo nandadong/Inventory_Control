@@ -3,6 +3,7 @@ package com.example.nandong.inventorycontrol;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -11,16 +12,24 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by nandong on 12/6/16.
  */
 
 public class DisplayItemActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory_info);
+
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String itemInfo = getIntent().getStringExtra("itemInfo");
         //Log.d("Item info", "Item info is " + itemInfo);

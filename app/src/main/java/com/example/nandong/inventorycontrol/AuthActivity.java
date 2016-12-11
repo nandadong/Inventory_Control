@@ -31,8 +31,6 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -56,13 +54,5 @@ public class AuthActivity extends AppCompatActivity {
         webView.loadUrl(url);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
 }

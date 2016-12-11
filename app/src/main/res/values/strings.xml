@@ -15,5 +15,7 @@
 
     <string name="open_drawer">open drawer</string>
     <string name="close_drawer">close drawer</string>
-    <string name="activity_login_btn_text">Log in</string>
+    <string name="activity_login_btn_text">log in</string>
+
+    <string name="welcome_text">welcome to inventory control!</string>
 </resources>

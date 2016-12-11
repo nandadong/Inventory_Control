@@ -66,6 +66,14 @@ public class SearchUsernameFragment extends Fragment implements View.OnClickList
                                 Intent intent = new Intent(getActivity(), DisplayInventoryListActivity.class);
                                 intent.putExtra("rawInventoryList", rawInventoryList);
                                 startActivity(intent);
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity().getApplicationContext(),
+                                                "custodian not found in database", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         } catch (IOException | JsonSyntaxException e) {
                             e.printStackTrace();
