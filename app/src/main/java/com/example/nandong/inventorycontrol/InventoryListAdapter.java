@@ -1,6 +1,7 @@
 package com.example.nandong.inventorycontrol;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,18 @@ public class InventoryListAdapter extends BaseAdapter {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        final String itemInfo = jsonObject.toString();
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DisplayItemActivity.class);
+
+                intent.putExtra("itemInfo", itemInfo);
+                context.startActivity(intent);
+            }
+        });
+
         return convertView;
     }
 }
