@@ -78,7 +78,6 @@ public class ScanBarcodeFragment extends Fragment implements View.OnClickListene
                         String itemInfo = fetchScannedItemInfo(scanContent);
 
                         if (!itemInfo.isEmpty()) {
-                            //System.out.println("Item Scanned: " + itemInfo);
                             Intent intent = new Intent(getActivity(), DisplayItemActivity.class);
                             intent.putExtra("itemInfo", itemInfo);
                             startActivity(intent);

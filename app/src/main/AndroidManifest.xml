@@ -21,6 +21,7 @@
         <activity android:name=".AuthActivity" />
         <activity android:name=".DisplayItemActivity" />
         <activity android:name=".DisplayInventoryListActivity" />
+        <activity android:name=".TransferOwnershipActivity" />
     </application>
 
 </manifest>

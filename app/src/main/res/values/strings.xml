@@ -18,4 +18,5 @@
     <string name="activity_login_btn_text">log in</string>
 
     <string name="welcome_text">welcome to inventory control!</string>
+    <string name="transfer">transfer</string>
 </resources>

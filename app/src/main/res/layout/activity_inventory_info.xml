@@ -214,6 +214,13 @@
                 android:layout_marginTop="@dimen/spacing_small"
                 android:layout_marginBottom="@dimen/spacing_medium"/>
 
+            <Button
+                android:id="@+id/item_transfer_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/transfer"/>
+
         </LinearLayout>
 
     </ScrollView>
